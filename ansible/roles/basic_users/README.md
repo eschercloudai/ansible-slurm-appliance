@@ -20,7 +20,7 @@ Role Variables
 - `create_home`, `generate_ssh_key` and `ssh_key_comment` are set automatically and should not be overriden.
 - `uid` should be set, so that the UID/GID is consistent across the cluster (which Slurm requires).
 - `shell` may be set if required, but will be overriden with `/sbin/nologin` on `control` nodes to prevent user login.
-- An additional key `public_key` may optionally be specified to define a key to log into the cluster.
+- An additional key list of `public_keys` may optionally be specified to define one or more keys to log into the cluster.
 - Any other keys may present for other purposes (i.e. not used by this role).
 
 Dependencies
@@ -47,10 +47,12 @@ basic_users_users:
   - comment: Alice Aardvark
     name: alice
     uid: 2005
-    public_key: ssh-rsa ...
+    public_keys: ['ssh-rsa ...']
   - comment: Bob Badger
     name: bob
     uid: 2006
-    public_key: ssh-rsa ...
+    public_keys: 
+	  - ssh-rsa ...
+	  - ssh-ed25519 ....
     state: absent
 ```

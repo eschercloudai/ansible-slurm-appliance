@@ -17,15 +17,15 @@
 
 - name: Write supplied public key as authorized for SSH access
   authorized_key:
-    user: "{{ item.name }}"
+    user: "{{ item[0].name }}"
     state: present
-    key: "{{ item.public_key }}"
-  loop: "{{ basic_users_users }}"
+    key: "{{ item[1] }}"
+  loop: "{{ lookup('subelements', basic_users_users, 'public_keys', {'skip_missing': True } ) }}"
   loop_control:
-    label: "{{ item.name }} [{{ item.state | default('present') }}]"
+    label: "{{ item.0.name }} [{{ item[0].state | default('present') }}]"
   when:
-    - item.state | default('present') == 'present'
-    - item.public_key is defined
+    - item[0].state | default('present') == 'present'
+    - item[1] is defined 
     - basic_users_manage_homedir
   run_once: true
 
