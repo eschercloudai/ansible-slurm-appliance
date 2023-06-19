@@ -18,7 +18,11 @@
 
 - hosts: builder
   become: yes
-  gather_facts: no
+  gather_facts: yes
+  pre_tasks:
+    - name: Get the list of services
+      service_facts:
+
   tasks:
     - name: Disable firewalld
       # This is enabled on installation, which isn't what we want
@@ -26,6 +30,7 @@
         name: firewalld
         state: stopped
         enabled: false
+      when: "'firewalld.service' in services"
 
     # - import_playbook: filesystems.yml
     - name: nfs
@@ -118,6 +123,7 @@
         src: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}.tar.gz"
         dest: "/tmp"
         creates: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}/prometheus"
+        remote_src: true
 
     - name: propagate official prometheus and promtool binaries
       copy:
