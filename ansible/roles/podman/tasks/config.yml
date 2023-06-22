@@ -72,7 +72,10 @@
   loop: "{{ podman_user_info.results }}"
   become: yes
   register: podman_tmp
-
+- name: reinstall shadow-utils 
+  become: yes
+  ansible.builtin.command: "dnf -y reinstall shadow-utils"
+    
 - name: Reset podman database
   # otherwise old config overrides!
   command:
