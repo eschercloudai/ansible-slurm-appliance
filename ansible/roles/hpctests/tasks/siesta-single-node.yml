@@ -1,0 +1,35 @@
+---
+
+- name: Make directory
+  file:
+    path: "{{ hpctests_rootdir }}/siesta"
+    state: directory
+
+- name: download the siesta source
+  ansible.builtin.git:
+    repo: "{{ hpctests_siesta_repo }}"
+    dest: "{{ hpctests_rootdir }}/siesta"
+    version: "{{ hpctests_siesta_version }}"
+
+- name: Create build siesta job script
+  template:
+    src: "siesta-build.sh.j2"
+    dest: "{{ hpctests_siesta_srcdir }}/siesta-build-{{ hpctests_hpl_arch }}.sh"
+
+- name: Create short siesta tests job script
+  template:
+    src: "siesta-short-test-suite.sh.j2"
+    dest: "{{ hpctests_siesta_builddir }}/siesta-short-test-suite.sh-{{ hpctests_hpl_arch }}.sh"
+  
+- name: Build siesta executables
+  shell:
+    cmd: "sbatch --wait siesta-build-{{ hpctests_hpl_arch }}.sh"
+    chdir: "{{ hpctests_siesta_srcdir }}"
+    creates: "{{ hpctests_siesta_builddir }}/Src/siesta"
+  become: no
+
+- name: run short siesta tests
+  shell:
+    cmd: "sbatch --wait siesta-short-test-suite.sh-{{ hpctests_hpl_arch }}.sh"
+    chdir: "{{ hpctests_siesta_builddir }}"
+  become: no

@@ -26,3 +26,14 @@
     - include: hpl-solo.yml
   tags:
     - hpl-solo
+
+- name: siesta
+  block:
+    - include: siesta-single-node.yml
+  tags: 
+    - siesta
+
+#- name: run multinode siesta
+#  block:
+#    - include: multinode-siesta.yml
+#      when: hpctests_computes.stdout_lines | length > 1

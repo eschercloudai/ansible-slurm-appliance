@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+
+#SBATCH --nodes=1
+#SBATCH --output=%x.%a.out
+#SBATCH --error=%x.%a.out
+#SBATCH --exclusive
+#SBATCH --partition={{ hpctests_partition }}
+{%if hpctests_nodes is defined %}#SBATCH --nodelist={{ hpctests_computes.stdout_lines[0] }}{% endif %}
+
+module load {{ hpctests_siesta_modules | join(' ' ) }}
+module list
+rm -rf  {{ hpctests_siesta_builddir }}
+CC=mpicc FC=mpif90 cmake -S. -B'{{ hpctests_siesta_builddir }}' -DCMAKE_INSTALL_PREFIX='{{ hpctests_siesta_installdir }}' -DWITH_NETCDF=ON -DNetCDF_ROOT="$NETCDF_FORTRAN_DIR" -DWITH_MPI=ON -DSCALAPACK_LIBRARY=scalapack -DSCALAPACK_LIBRARY_DIR="$SCALAPACK_LIB" -DWITH_FFTW=ON -DCMAKE_BUILD_TYPE=Check && cmake --build {{ hpctests_siesta_builddir }}  -j {{ ansible_processor_nproc | int + 1 }} && cmake --install {{ hpctests_siesta_builddir }}
