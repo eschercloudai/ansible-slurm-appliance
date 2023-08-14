@@ -1,0 +1,22 @@
+---
+
+- name: Make directory
+  file:
+    path: "{{ hpctests_scipy_rundir }}"
+    state: directory
+
+- name: Create short scipy-tests.py script
+  template:
+    src: "scipy-test.py.j2"
+    dest: "{{ hpctests_scipy_rundir }}/scipy-test.py"
+
+- name: Create short scipy-tests.sh slurm submission script
+  template:
+    src: "scipy-test-sh.j2"
+    dest: "{{ hpctests_scipy_rundir }}/scipy-test.sh"
+
+- name: submit and run scipy-tests tests
+  shell:
+    cmd: "sbatch --wait {{ hpctests_scipy_rundir }}/scipy-test.sh"
+    chdir: "{{ hpctests_scipy_rundir }}"
+  become: no

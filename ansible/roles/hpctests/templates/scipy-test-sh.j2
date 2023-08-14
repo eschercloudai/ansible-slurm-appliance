@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --job-name==scipy-test
+#SBATCH --output=%x.%J.out
+#SBATCH --error=%x.%J.out
+#SBATCH --exclusive
+
+
+#SBATCH --partition={{ hpctests_partition }}
+{%if hpctests_nodes is defined %}#SBATCH --nodelist={{ hpctests_computes.stdout_lines[0] }}{% endif %}
+
+cd {{ hpctests_scipy_rundir }}
+module purge
+module load {{ hpctests_scipy_modules | join(' ' ) }}
+env
+python3 {{ hpctests_scipy_rundir }}/scipy-test.py

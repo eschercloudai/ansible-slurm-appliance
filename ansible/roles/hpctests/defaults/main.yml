@@ -15,3 +15,5 @@ hpctests_hpl_arch: linux64
 hpctests_siesta_repo: https://gitlab.com/siesta-project/siesta.git
 hpctests_siesta_version: b07b79ab63b5a2d00c22a10f5bbf5822c97fd4a4
 hpctests_siesta_modules: [gnu9 openmpi4 scalapack netcdf-fortran fftw]
+hpctests_scipy_matrix_size: 10000
+hpctests_scipy_modules: [gnu9 openmpi4 py3-scipy]

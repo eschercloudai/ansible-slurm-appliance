@@ -33,6 +33,12 @@
   tags: 
     - siesta
 
+- name: siesta
+  block:
+    - include: scipy.yml
+  tags: 
+    - scipy
+
 #- name: run multinode siesta
 #  block:
 #    - include: multinode-siesta.yml

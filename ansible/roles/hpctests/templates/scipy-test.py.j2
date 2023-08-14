@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+import scipy.sparse.linalg
+matrix = scipy.sparse.random( {{ hpctests_scipy_matrix_size }}, {{ hpctests_scipy_matrix_size }}, density=0.1 )
+matrix = matrix + matrix.transpose()
+eigenvalues, eigenvectors = scipy.sparse.linalg.eigsh(matrix)
+print('OK')
